@@ -1,0 +1,41 @@
+services:
+
+  web:
+    build: .
+    container_name: mycity_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_PASS: root
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: mycity_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mycity
+    ports:
+      - "3307:3306"
+    volumes:
+      - ../db/mycity.sql:/docker-entrypoint-initdb.d/mycity.sql
+      - mycity_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: mycity_pma
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - db
+
+volumes:
+  mycity_data:

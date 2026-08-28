@@ -1,0 +1,86 @@
+:root {
+    --mycity-primary: #2d6a4f;
+    --mycity-dark:    #1b4332;
+    --mycity-accent:  #95d5b2;
+}
+
+.navbar {
+    background-color: var(--mycity-primary) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+
+/* box για το εισαγωγικό τμήμα index */
+.hero-section { 
+    background: linear-gradient(135deg, var(--mycity-primary), var(--mycity-dark));
+    color: #fff;
+    padding: 2.5rem 1.5rem;
+    border-radius: 10px;
+}
+
+/* γραμματοσειρά για το box για στο εισγωγικό τμήμα index */
+.hero-section .lead {
+    font-size: 1rem;
+    opacity: .9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* περίγραμμα γύρω από τα βήματα στο index */
+.step-box {
+    padding: 1.25rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+}
+
+/* κυκλάκια στους αριθμούς στο index */
+.step-number {
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+    margin: 0 auto .75rem;
+    border-radius: 50%;
+    background-color: var(--mycity-accent);
+    color: var(--mycity-dark);
+    font-weight: 700;
+}
+
+/* κουμπί υποβολή αναφοράς στο index */
+.btn-primary {
+    --bs-btn-bg: var(--mycity-primary);
+    --bs-btn-border-color: var(--mycity-primary);
+    --bs-btn-hover-bg: var(--mycity-dark);
+    --bs-btn-hover-border-color: var(--mycity-dark);
+    --bs-btn-active-bg: var(--mycity-dark);
+    --bs-btn-active-border-color: var(--mycity-dark);
+    --bs-btn-disabled-bg: #8fb3a1;
+    --bs-btn-disabled-border-color: #8fb3a1;
+}
+
+.issue-card {
+    transition: transform .15s, box-shadow .15s;
+}
+
+.issue-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,.12);
+}
+
+/* γραμμή πάνω από το footer */
+footer {
+    background-color: var(--mycity-dark) !important;
+    border-top: 3px solid var(--mycity-accent);
+}
+
+/* αφαίρεση υπογράμμισης */
+footer a.link-light {
+    text-decoration: none;
+}
+
+footer a.link-light:hover {
+    color: var(--mycity-accent) !important;
+}
+
+
+
