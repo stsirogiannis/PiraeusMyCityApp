@@ -1,6 +1,6 @@
 # Piraeus MyCity — City Issue Reporting Application
 
-- **Note:** The user-facing interface (menus, prompts, and messages) is in Greek.
+**Note:** The user-facing interface (menus, prompts, and messages), as well as the code comments, are in Greek.
 
 ## Technologies
 
