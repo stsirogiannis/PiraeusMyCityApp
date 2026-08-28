@@ -112,3 +112,7 @@ Name: `mycity`
 Nominatim (OpenStreetMap) for converting address to coordinates.
 The call is made server-side via cURL, with a User-Agent header set
 as required by the service. Limit: 1 request per second.
+
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
