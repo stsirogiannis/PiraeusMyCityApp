@@ -1,114 +1,68 @@
-# Piraeus MyCity — Εφαρμογή Αναφοράς Προβλημάτων Πόλης
+# Piraeus MyCity App — Documentation
 
-## Τεχνολογίες
+## Contents
 
-- HTML5, CSS3, Bootstrap 5.3
-- JavaScript (vanilla)
-- PHP 8.2 (mysqli, prepared statements)
-- MySQL 8
-- Leaflet.js + OpenStreetMap
-- Nominatim API (geocoding)
+1. Introduction .............................................................................................................. 4
+2. User Manual .............................................................................................................. 5
+   2.1 Installing & running the application .................................................................. 5
+      2.1.1 Using XAMPP ............................................................................................. 5
+      2.1.2 Using Docker .............................................................................................. 6
+   2.2 Submitting an issue report (Interface 1) ............................................................ 8
+   2.3 Viewing and searching reports (Interface 2) ...................................................... 9
+   2.4 Viewing report details (Interface 3) .................................................................. 10
+   2.5 Administrator Dashboard (Interface 4) ............................................................. 11
+   2.6 Responsive design for mobile devices .............................................................. 12
+   2.7 Security ............................................................................................................ 12
+3. Future Improvements ................................................................................................ 13
+   3.1 Security ............................................................................................................ 13
+   3.2 Functionality ..................................................................................................... 13
+   3.3 User Experience ............................................................................................... 13
 
-## Εκτέλεση με Docker
+---
 
-Από τον φάκελο `code/`:
+## 1. Introduction
 
-    1. docker compose up --build (1η φορά)
-    2. docker compose up (2+ φορές)
+This document constitutes the documentation for the web-based issue reporting application, Piraeus MyCity. The application implements an issue reporting system for the city of Piraeus, through which citizens can log everyday problems such as: damage to road infrastructure, water supply network faults, or gaps in municipal lighting. Reports can be submitted either under the citizen's name or anonymously.
 
-- Εφαρμογή: http://localhost:8080
-- phpMyAdmin: http://localhost:8081
+The implementation is based on HTML5, CSS3, JavaScript, and PHP for the frontend and backend respectively, with the Bootstrap 5 library used for the user interface (UI) design and Leaflet.js for displaying maps with OpenStreetMap data. Data storage is handled by a MySQL database, with PHP–MySQL communication implemented exclusively through the mysqli library using prepared statements, to ensure protection against SQL injection attacks.
 
-Η βάση δεδομένων δημιουργείται αυτόματα κατά την πρώτη εκκίνηση,
-από το αρχείο `../db/mycity.sql`.
+The document is organized into the following sections: after this introduction, Section 2 presents the application's user manual in detail, with step-by-step instructions for both installing and running it, as well as for using each individual feature, accompanied by corresponding screenshots. Section 3 covers future improvements that could be made to the application in the areas of security, functionality, and user experience.
 
-Σταμάτημα:
+---
 
-    docker compose down (τα δεδομένα σώζονται)
+## 2. User Manual
 
-Σταμάτημα με διαγραφή δεδομένων:
+### 2.1 Installing & running the application
 
-    docker compose down -v
-    docker compose down -v --rmi all (διαγραφή όλων, συμπεριλαμβανομένου και του build)
-    !! Τα αποθηκευμένα βίντεο δεν διαγράφονται ποτέ αυτόματα
+#### 2.1.1 Using XAMPP
 
-## Εκτέλεση με XAMPP
+**Step 1: Install XAMPP**
+Download and install XAMPP from the official website (apachefriends.org), selecting the Apache, MySQL, and PHP packages. After installation, open the XAMPP Control Panel and start the Apache and MySQL services.
 
-1. Αντιγραφή του φακέλου στο `htdocs/mycity`
-2. Δημιουργία βάσης `mycity` στο phpMyAdmin
-3. Εισαγωγή του `db/mycity.sql`
-4. Δικαιώματα εγγραφής στον φάκελο uploads: `chmod 777 uploads` (μόνο για Linux/macOS)
-5. Ενεργοποίηση `extension=curl` στο php.ini
-6. `upload_max_filesize = 25M` και `post_max_size = 30M` στο php.ini
-7. Άνοιγμα: http://localhost/mycity/
+**Step 2: Place the code**
+Copy the project folder (mycity) into the `htdocs` folder of the XAMPP installation, so that the application is accessible via the address http://localhost/mycity/.
 
-## Στοιχεία σύνδεσης διαχειριστή
+**Step 3: Create the database**
+Open phpMyAdmin (http://localhost/phpmyadmin) and run the SQL script included in the `/db` folder, which creates the `mycity` database with the required tables (categories, issues, admins) and inserts the predefined issue categories.
 
-- Username: `admin`
-- Password: `Admin1234`
+**Step 4: Set permissions on the uploads/ folder (Unix-based systems only)**
+The `uploads/` folder, where videos attached by citizens are stored, must have write permissions for the web server user. Also run the command `chmod 777 uploads` from the terminal, inside the project folder.
 
-### Προσθήκη νέου διαχειριστή
+**Step 5: php.ini settings**
+For geocoding to work correctly, the curl extension is required, which is enabled in the php.ini file (XAMPP/xamppfiles/etc/) by removing the semicolon from the line `extension=curl`. Additionally, to support larger video files, it is recommended to increase the values of `upload_max_filesize` and `post_max_size` to at least 25MB and 30MB respectively.
 
-    Πρέπει να δημιουργηθεί το παρακάτω αρχείο, και έπειτα να ανοιχτεί στον browser:
+**Step 6: Create an administrator account**
+Since public administrator registration is not supported, the administrator account is created directly in the database. The test account credentials are: username: **admin**, password: **Admin1234**. (see README.md)
 
-    ---ΑΡΧΗ---
+**Step 7: Run the application**
+Open a browser and navigate to http://localhost/mycity/, where the application's home page will appear.
 
-        <?php
-        require 'includes/db.php';
+#### 2.1.2 Using Docker
 
-        $username  = 'xxx';
-        $password  = 'xxx';
-        $full_name = 'xxx';
-        $email     = 'xxx';
+To avoid manual installation and environment configuration, the application also comes with Docker files that allow it to run on any system with a single command. On first startup, the `mycity` database is created automatically and the SQL script in the `/db` folder runs without user intervention, creating the tables and inserting the predefined categories. Permissions on the `uploads` folder are set automatically.
 
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+**Step 1: Install and run Docker**
+Download Docker Desktop from the Docker website (docker.com/products/docker-desktop), run it, and leave it running in the background. Within the app, in the bottom-left corner of the window, the indicator *Engine running* should appear.
 
-        $stmt = mysqli_prepare($conn,
-            "INSERT INTO admins (username, password_hash, full_name, email)
-            VALUES (?, ?, ?, ?)"
-        );
-        mysqli_stmt_bind_param($stmt, 'ssss', $username, $hash, $full_name, $email);
-
-        mysqli_stmt_close($stmt);
-
-    ---ΤΕΛΟΣ---
-
-    ΠΡΟΣΟΧΗ!!!
-    1. Το αρχείο θα πρέπει να διαγραφεί αφού δημιουργηθέι ο διαχειριστής.
-    2. Σε περίπτωση που εκτελεστεί από το docker η εντολή <docker compose down -v> θα διαγραφεί ο διαχειριστής που δημιουργήθηκε
-
-## Δομή αρχείων
-
-    code/
-      index.php          Interface 1 — Υποβολή αναφοράς
-      browse.php         Interface 2 — Προβολή & αναζήτηση
-      detail.php         Interface 3 — Λεπτομέρεια αναφοράς
-      login.php          Σύνδεση διαχειριστή
-      admin.php          Interface 4 — Dashboard
-      logout.php         Αποσύνδεση
-      includes/
-        db.php           Σύνδεση με τη βάση
-        header.php       Κοινό navbar
-        footer.php       Κοινό footer με χάρτη
-        functions.php    Geocoding, παραγωγή anon ID
-        auth.php         Προστασία σελίδων διαχειριστή
-      assets/
-        css/style.css
-        js/
-          report.js
-          detail-map.js
-      uploads/           Αποθήκευση video
-
-## Βάση δεδομένων
-
-Όνομα: `mycity`
-
-- `categories` — κατηγορίες προβλημάτων με βάρος προτεραιότητας
-- `issues` — οι αναφορές
-- `admins` — λογαριασμοί διαχειριστών
-
-## Εξωτερικό API
-
-Nominatim (OpenStreetMap) για μετατροπή διεύθυνσης σε συντεταγμένες.
-Η κλήση γίνεται server-side μέσω cURL, με ορισμό User-Agent header
-όπως απαιτεί η υπηρεσία. Όριο: 1 αίτημα ανά δευτερόλεπτο.
+**Step 2: Run the application**
+Open a terminal in the project folder and run the command:
