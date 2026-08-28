@@ -66,7 +66,7 @@ Download Docker Desktop from the Docker website (docker.com/products/docker-desk
 
 **Step 2: Run the application**
 Open a terminal in the project folder and run the command:
-docker compose up --build
+`docker compose up --build`
 
 
 After completion, the application is accessible at: http://localhost:8080, and phpMyAdmin at: http://localhost:8081
