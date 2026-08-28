@@ -1,5 +1,7 @@
 # Piraeus MyCity — City Issue Reporting Application
 
+- **Note:** The user-facing interface (menus, prompts, and messages) is in Greek.
+
 ## Technologies
 
 - HTML5, CSS3, Bootstrap 5.3
