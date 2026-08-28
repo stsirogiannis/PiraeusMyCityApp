@@ -1,6 +1,6 @@
-# Piraeus MyCity — Εφαρμογή Αναφοράς Προβλημάτων Πόλης
+# Piraeus MyCity — City Issue Reporting Application
 
-## Τεχνολογίες
+## Technologies
 
 - HTML5, CSS3, Bootstrap 5.3
 - JavaScript (vanilla)
@@ -9,49 +9,49 @@
 - Leaflet.js + OpenStreetMap
 - Nominatim API (geocoding)
 
-## Εκτέλεση με Docker
+## Running with Docker
 
-Από τον φάκελο `code/`:
+From the `code/` folder:
 
-    1. docker compose up --build (1η φορά)
-    2. docker compose up (2+ φορές)
+    1. docker compose up --build (1st time)
+    2. docker compose up (2nd+ time)
 
-- Εφαρμογή: http://localhost:8080
+- Application: http://localhost:8080
 - phpMyAdmin: http://localhost:8081
 
-Η βάση δεδομένων δημιουργείται αυτόματα κατά την πρώτη εκκίνηση,
-από το αρχείο `../db/mycity.sql`.
+The database is created automatically on first startup,
+from the file `../db/mycity.sql`.
 
-Σταμάτημα:
+Stopping:
 
-    docker compose down (τα δεδομένα σώζονται)
+    docker compose down (data is preserved)
 
-Σταμάτημα με διαγραφή δεδομένων:
+Stopping with data deletion:
 
     docker compose down -v
-    docker compose down -v --rmi all (διαγραφή όλων, συμπεριλαμβανομένου και του build)
-    !! Τα αποθηκευμένα βίντεο δεν διαγράφονται ποτέ αυτόματα
+    docker compose down -v --rmi all (deletes everything, including the build)
+    !! Stored videos are never deleted automatically
 
-## Εκτέλεση με XAMPP
+## Running with XAMPP
 
-1. Αντιγραφή του φακέλου στο `htdocs/mycity`
-2. Δημιουργία βάσης `mycity` στο phpMyAdmin
-3. Εισαγωγή του `db/mycity.sql`
-4. Δικαιώματα εγγραφής στον φάκελο uploads: `chmod 777 uploads` (μόνο για Linux/macOS)
-5. Ενεργοποίηση `extension=curl` στο php.ini
-6. `upload_max_filesize = 25M` και `post_max_size = 30M` στο php.ini
-7. Άνοιγμα: http://localhost/mycity/
+1. Copy the folder to `htdocs/mycity`
+2. Create the `mycity` database in phpMyAdmin
+3. Import `db/mycity.sql`
+4. Write permissions on the uploads folder: `chmod 777 uploads` (Linux/macOS only)
+5. Enable `extension=curl` in php.ini
+6. `upload_max_filesize = 25M` and `post_max_size = 30M` in php.ini
+7. Open: http://localhost/mycity/
 
-## Στοιχεία σύνδεσης διαχειριστή
+## Administrator login credentials
 
 - Username: `admin`
 - Password: `Admin1234`
 
-### Προσθήκη νέου διαχειριστή
+### Adding a new administrator
 
-    Πρέπει να δημιουργηθεί το παρακάτω αρχείο, και έπειτα να ανοιχτεί στον browser:
+    The following file must be created, and then opened in the browser:
 
-    ---ΑΡΧΗ---
+    ---START---
 
         <?php
         require 'includes/db.php';
@@ -71,44 +71,44 @@
 
         mysqli_stmt_close($stmt);
 
-    ---ΤΕΛΟΣ---
+    ---END---
 
-    ΠΡΟΣΟΧΗ!!!
-    1. Το αρχείο θα πρέπει να διαγραφεί αφού δημιουργηθέι ο διαχειριστής.
-    2. Σε περίπτωση που εκτελεστεί από το docker η εντολή <docker compose down -v> θα διαγραφεί ο διαχειριστής που δημιουργήθηκε
+    WARNING!!!
+    1. The file must be deleted after the administrator is created.
+    2. If run via docker, the command <docker compose down -v> will delete the administrator that was created
 
-## Δομή αρχείων
+## File structure
 
     code/
-      index.php          Interface 1 — Υποβολή αναφοράς
-      browse.php         Interface 2 — Προβολή & αναζήτηση
-      detail.php         Interface 3 — Λεπτομέρεια αναφοράς
-      login.php          Σύνδεση διαχειριστή
+      index.php          Interface 1 — Report submission
+      browse.php         Interface 2 — View & search
+      detail.php         Interface 3 — Report detail
+      login.php          Administrator login
       admin.php          Interface 4 — Dashboard
-      logout.php         Αποσύνδεση
+      logout.php         Logout
       includes/
-        db.php           Σύνδεση με τη βάση
-        header.php       Κοινό navbar
-        footer.php       Κοινό footer με χάρτη
-        functions.php    Geocoding, παραγωγή anon ID
-        auth.php         Προστασία σελίδων διαχειριστή
+        db.php           Database connection
+        header.php       Shared navbar
+        footer.php       Shared footer with map
+        functions.php    Geocoding, anonymous ID generation
+        auth.php         Admin page protection
       assets/
         css/style.css
         js/
           report.js
           detail-map.js
-      uploads/           Αποθήκευση video
+      uploads/           Video storage
 
-## Βάση δεδομένων
+## Database
 
-Όνομα: `mycity`
+Name: `mycity`
 
-- `categories` — κατηγορίες προβλημάτων με βάρος προτεραιότητας
-- `issues` — οι αναφορές
-- `admins` — λογαριασμοί διαχειριστών
+- `categories` — problem categories with priority weight
+- `issues` — the reports
+- `admins` — administrator accounts
 
-## Εξωτερικό API
+## External API
 
-Nominatim (OpenStreetMap) για μετατροπή διεύθυνσης σε συντεταγμένες.
-Η κλήση γίνεται server-side μέσω cURL, με ορισμό User-Agent header
-όπως απαιτεί η υπηρεσία. Όριο: 1 αίτημα ανά δευτερόλεπτο.
+Nominatim (OpenStreetMap) for converting address to coordinates.
+The call is made server-side via cURL, with a User-Agent header set
+as required by the service. Limit: 1 request per second.
